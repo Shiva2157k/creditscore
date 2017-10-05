@@ -2,19 +2,28 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import axios from 'axios';
+import Popup from './popup';
 
 class App extends Component {
 
     constructor(props) {
         super(props);
         this.state = {value: 0};
+        this.state = {creditStatus:{message:"check"}};
         this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.setInputValueToState = this.setInputValueToState.bind(this);
+
 
     }
 
-    handleChange(event) {
+    setInputValueToState(event){
         this.setState({value: event.target.value});
+    }
+
+
+
+    handleChange(event) {
+
         var self = this;
        const statusURL = `http://localhost:8080/getStatus?score= ${this.state.value}`;
 
@@ -23,9 +32,11 @@ class App extends Component {
                .then(function (response) {
                    if (response.data) {
                        self.setState({
-                           vehicleList: response.data
+                           creditStatus: response.data
+
                        })
                    }
+                   console.log(response.data);
                })
                .catch(function (error) {
                    console.log(error);
@@ -33,21 +44,30 @@ class App extends Component {
 
     }
 
-    handleSubmit(event) {
-        alert('A name was submitted: ' + this.state.value);
-        event.preventDefault();
-    }
+
 
   render() {
     return (
-        <div>
-        <form onSubmit={this.handleSubmit}>
+        <div className="container">
+        <div className="row">
+
+            <div className="col-md-10">
+            <div className="form-group">
+
             <label>
-                Enter the Credit Score:
-                <input type="text" value={this.state.value}  />
+                <h2>Enter the Credit Score</h2>
             </label>
-            <input type="submit" value="submit" onChange={this.handleChange}/>
-        </form>
+                <input className="form-control" type="text" value={this.state.value} onChange={this.setInputValueToState}  />
+            </div>
+
+
+            <input className="btn btn-primary" type="button" value="submit" onClick={this.handleChange}/>
+            <Popup message = {this.state.creditStatus.message}/>
+                <div>
+                    {this.state.creditStatus.message}
+                </div>
+            </div>
+        </div>
         </div>
 
     );
