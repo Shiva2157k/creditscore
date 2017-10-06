@@ -9,10 +9,15 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {value: 0};
-        this.state = {creditStatus:{message:"check"}};
+        this.state = {creditStatus:{message:" "}};
         this.handleChange = this.handleChange.bind(this);
         this.setInputValueToState = this.setInputValueToState.bind(this);
+        this.hidePopup = this.hidePopup.bind(this);
 
+
+    }
+    hidePopup(){
+        this.setState({showPopup:false});
 
     }
 
@@ -34,6 +39,9 @@ class App extends Component {
                        self.setState({
                            creditStatus: response.data
 
+                       })
+                       self.setState({
+                           showPopup: true
                        })
                    }
                    console.log(response.data);
@@ -60,15 +68,18 @@ class App extends Component {
                 <input className="form-control" type="text" value={this.state.value} onChange={this.setInputValueToState}  />
             </div>
 
+                <button type="button" className="btn btn-primary"
+                        value="submit" onClick={this.handleChange}>
+                    Submit
+                </button>
 
-            <input className="btn btn-primary" type="button" value="submit" onClick={this.handleChange}/>
-            <Popup message = {this.state.creditStatus.message}/>
-                <div>
-                    {this.state.creditStatus.message}
+
                 </div>
+            <Popup message = {this.state.creditStatus.message} showPopup = {this.state.showPopup} hidePopup={this.hidePopup} />
+
             </div>
         </div>
-        </div>
+
 
     );
   }
